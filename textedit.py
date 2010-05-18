@@ -19,7 +19,7 @@ def screen_caret(screen, x, y):
 
 def get_point(window=None):
    if window:
-      return window.caret
+      return window.caret()
    else:
       return curses.getsyx()[::-1]
 
@@ -29,77 +29,31 @@ def get_point(window=None):
 
 def main(screen):
 
-   basic_syntax = SyntaxClass("basic")
-   basic_syntax.add("character", r".")
-   basic_syntax.add("word", r" ")
-   basic_syntax.add("sentance", r"\.")
+   # setup the basic syntax for text files
+   text_syntax = SyntaxClass("basic")
+   text_syntax.add("character", r".")
+   text_syntax.add("word", r" ")
+   text_syntax.add("sentance", r"\.")
 
-   maxrow, maxcol = screen.getmaxyx() # 24 * 80 
-   log_window_rows = 5
-   divider_row = maxrow - log_window_rows 
-
-   logger = LogBuffer()
-   tmp_subwin = screen.subwin(log_window_rows, 
-                              maxcol, divider_row, 0)
-   logwin = Window(tmp_subwin, 
-                   (log_window_rows, maxcol), 
-                   (divider_row, 0),
-                   logger)
-
-   # make logger know how to render itself
-   # needed to render for each new log message
-   logger.render = logwin.render
-   logger.msg("== Program Start ==")
-
-   main_buffer = FileBuffer(open("README.markdown"))
-   mainwin = Window(screen.subwin(divider_row, maxcol, 0, 0), 
-                    (divider_row, maxcol), 
-                    (0, 0),
-                    main_buffer)
+   # make the main window 
+   mainwin = Window(screen, FileBuffer(open("README.markdown")))
    mainwin.render()
 
+   # the event loop
    while True: 
-      event = screen.getch() 
-      logger.msg("key: '%c'" % chr(event))
+      event = screen.getch()
       if event == ord("q"): break 
       
-      if event == ord("w"):
-         logger.msg("clear")
-         mainwin.clear()
+      if event == ord("e"): mainwin.clear()
+      if event == ord("r"): mainwin.render()
+      if event == ord("f"): mainwin.addstr("X")
+      if event == ord("w"): mainwin.rmove(0, -1)
+      if event == ord("a"): mainwin.rmove(-1, 0)
+      if event == ord("s"): mainwin.rmove(0, +1)
+      if event == ord("d"): mainwin.rmove(+1, 0)
 
-      if event == ord("e"):
-         mainwin.render()
-
-      if event == ord("r"):
-         mainwin.addstr("R")
-
-      if event == ord("j"): mainwin.rmove(0, +1)
-      if event == ord("k"): mainwin.rmove(0, -1)
-      if event == ord("l"): mainwin.rmove(+1, 0)
-      if event == ord(";"): mainwin.rmove(-1, 0)
-
-      if event == ord("f"):       
-         # need to convert between buffer and window
-         ox, oy = get_point()
-         if ox==0: ox = 1
-         if oy==0: oy = 1
-
-         nx, ny = basic_syntax.find("character",
-                                    main_buffer.buf, 
-                                    ox-1, 
-                                    oy-1)
-
-         if nx == None:
-            logger.msg("move (%d,%d) -> None" % (ox, oy)) 
-         else:         
-            nx -= 1
-            ny -= 1
-            logger.msg("move (%d,%d) -> (%d,%d)" % 
-                       (ox, oy, nx, ny))
-
-            set_point(screen, nx, ny)
-            set_point(mainwin, nx, ny)
-            mainwin.render()
+      if event == ord("c"):
+         mainwin.rmovef(lambda t, x, y: text_syntax.find("character", t, x, y))
 
 #------------------------------------------------------------------------------
 #

@@ -31,6 +31,27 @@ class LogBuffer(Buffer):
     def __getitem__(self):
         return self.log
 
+
+# -------------------------------------------------------------------
+# maxrow, maxcol = screen.getmaxyx() # 24 * 80 
+# log_window_rows = 5
+# divider_row = maxrow - log_window_rows 
+#
+# logger = LogBuffer()
+# tmp_subwin = screen.subwin(log_window_rows, 
+#                            maxcol, divider_row, 0)
+# logwin = Window(tmp_subwin, 
+#                 (log_window_rows, maxcol), 
+#                 (divider_row, 0),
+#                 logger)
+# 
+# # make logger know how to render itself
+# # needed to render for each new log message
+# logger.render = logwin.render
+# -------------------------------------------------------------------
+
+
+
 class FileBuffer(Buffer):
     def __init__(self, infile):
         self.buf = []

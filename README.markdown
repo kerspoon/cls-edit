@@ -1,10 +1,12 @@
-make a text editor just for editing cls files with tab completion syntax highlighting etc. 
-
-
+make a text editor just for editing cls files with tab completion, syntax 
+highlighting, etc. 
+              
 Todo
 ====
 
- + Get movement working
+ + Get forward char movement using `syntaxclass` working by testing 
+   without curses. 
+ + get forward line movement ...
 
 Long Term Todo
 ----
