@@ -1,0 +1,7 @@
+*.pyc
+fm_call.m
+rts_*.txt
+ignore/*
+solve_*.m
+psat_*.m
+*.res
