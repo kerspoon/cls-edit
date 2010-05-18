@@ -31,9 +31,3 @@ class SyntaxClass
   func add  :: Str 'case-name' -> Str 'regexp' 
   func find :: Str 'case-name' -> List Str 'text' -> Point 'start' -> Point  
 
-
-"because we want to have separate views of one buffer it cannot have one caret
-it would make much more sense to have one caret per window"
-
-"we are assuming that every SyntaxClass can be parsed by regexp. Much later 
-this can be replaced by proper parsing but for now leave it."

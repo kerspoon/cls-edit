@@ -34,7 +34,6 @@ def main(screen):
    basic_syntax.add("word", r" ")
    basic_syntax.add("sentance", r"\.")
 
-
    maxrow, maxcol = screen.getmaxyx() # 24 * 80 
    log_window_rows = 5
    divider_row = maxrow - log_window_rows 
@@ -82,13 +81,19 @@ def main(screen):
       if event == ord("f"):       
          # need to convert between buffer and window
          ox, oy = get_point()
+         if ox==0: ox = 1
+         if oy==0: oy = 1
+
          nx, ny = basic_syntax.find("character",
                                     main_buffer.buf, 
-                                    ox, 
-                                    oy)
+                                    ox-1, 
+                                    oy-1)
+
          if nx == None:
             logger.msg("move (%d,%d) -> None" % (ox, oy)) 
-         else:
+         else:         
+            nx -= 1
+            ny -= 1
             logger.msg("move (%d,%d) -> (%d,%d)" % 
                        (ox, oy, nx, ny))
 
