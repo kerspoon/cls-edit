@@ -1,12 +1,28 @@
+01234567890
+acdefghijkl
+
 make a text editor just for editing cls files with tab completion, syntax 
 highlighting, etc. 
+
+--------
+
+I have finally sorted out loads of bugs dealing with (x, y) or (y, x) as well as windows starting at (1,1) and buffers at (0,0). It could still do with documenting and hiding inconsistency behind classes.
+
+Moving forward by functions partially works. The `syntaxclass.find` function needs to move to the next line until it finds a match. There is code there but it doesn't appear to work. Test outside of curses. 
+
+Reverse find is after that. This could work by reversing each line before checking. 
+
+Once that is done we should be able to move through the file at will. 
+
+Might be nice to do editing & saving or scrolling next but it doesn't help the DEMO. Scrolling will probably require a re-think of how we use buffers. It might be a lot simpler if all buffers are a fixed width and length to exactly match one screen. Hence I propose the next items are:
+
+ + Move forward and backward by syntaxclass. 
+ + Select by syntax class. 
+
               
 Todo
 ====
 
- + Get forward char movement using `syntaxclass` working by testing 
-   without curses. 
- + get forward line movement ...
 
 Long Term Todo
 ----

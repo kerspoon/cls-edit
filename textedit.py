@@ -51,9 +51,14 @@ def main(screen):
       if event == ord("a"): mainwin.rmove(-1, 0)
       if event == ord("s"): mainwin.rmove(0, +1)
       if event == ord("d"): mainwin.rmove(+1, 0)
+      if event == ord("x"): mainwin.here()
 
-      if event == ord("c"):
-         mainwin.rmovef(lambda t, x, y: text_syntax.find("character", t, x, y))
+      
+      def find(syntaxname):
+         return lambda t, x, y: text_syntax.find(syntaxname, t, x, y)
+
+      if event == ord("c"): mainwin.movef(find("character"))
+      if event == ord("v"): mainwin.movef(find("word"))
 
 #------------------------------------------------------------------------------
 #

@@ -14,6 +14,9 @@ class Window(object):
       self.window.clear()
       self.window.box()
       self.window.refresh()
+      
+      with open("tmp.txt","w") as fb:
+         fb.write("----------\n")
 
    def render(self):
       self.window.clear()
@@ -56,13 +59,25 @@ class Window(object):
       my, mx = self.window.getmaxyx()
       ny = clamp(y, 1, my-2)
       nx = clamp(x, 1, mx-2)
-      return nx, ny
+      return nx-1, ny-1
 
-   def rmovef(self, func):
+   def movef(self, func):
       ox, oy = self.caret()
-      nx, ny = func(self.tbuffer.buf, ox-1, oy-1)
-      if nx and ny:
-         self.rmove(nx-1, ny-1)
+      nx, ny = func(self.tbuffer.buf, ox, oy)
+
+      if nx is not None and ny is not None:
+         with open("tmp.txt","a") as fb:
+            fb.write("from %d %d (%s)\n" % (ox, oy, self.buf(ox,oy)))
+            fb.write("to   %d %d (%s)\n" % (nx, ny, self.buf(nx,ny)))
+         self.move(nx+1, ny+1)
+
+   def buf(self, x, y, size=10):
+      return self.tbuffer.buf[y][x:x+size]
+
+   def here(self):
+      with open("tmp.txt","a") as fb:
+         ox, oy = self.caret()
+         fb.write("here %d %d (%s)\n" % (ox, oy, self.buf(ox,oy)))
 
 def clamp(value, vmin, vmax):
    if value > vmax:
