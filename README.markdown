@@ -6,6 +6,24 @@ highlighting, etc.
 
 --------
 
+It is already getting a bit messy. Splitting the text from a buffer into lines means that we cannot find end of lines. Reverse finding is complicated regardless but can be achieved by reversing the input text and playing around with the input and output positions to reflect that.
+
+If we had a very simple file type that could be parsed it might make things easier. 
+
+    func find_start :: Point 'start' -> Str 'id' -> Syntax 'parsed' -> Point
+        """Find the start of the next 'id' from 'start' in 'parsed'"""
+
+    func find_end :: Point 'start' -> Str 'id' -> Syntax 'parsed' -> Point
+        """Find the end of the next 'id' from 'start' in 'parsed'"""
+              
+    func find_full :: Point 'start' -> Str 'id' -> Syntax 'parsed' -> (Point, Point)
+        """Find the start and end of the next 'id' from 'start' in 'parsed'"""
+
+That would require the Syntax class to know the position of each bit of syntax.
+
+
+--------
+
 I have finally sorted out loads of bugs dealing with (x, y) or (y, x) as well as windows starting at (1,1) and buffers at (0,0). It could still do with documenting and hiding inconsistency behind classes.
 
 Moving forward by functions partially works. The `syntaxclass.find` function needs to move to the next line until it finds a match. There is code there but it doesn't appear to work. Test outside of curses. 
@@ -19,7 +37,6 @@ Might be nice to do editing & saving or scrolling next but it doesn't help the D
  + Move forward and backward by syntaxclass. 
  + Select by syntax class. 
 
-              
 Todo
 ====
 

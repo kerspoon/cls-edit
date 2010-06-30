@@ -52,6 +52,16 @@ class SyntaxClass(object):
        # Nothing Found
        return None, None
 
+    def rfind(self, name, text, start_col=0, start_line=0):
+
+        rtext = [x[::-1] for x in text][::-1]
+        rstart_col = start_col
+        rstart_line = start_line
+        print rtext
+        print rstart_col
+        print rstart_line
+        return self.find(name, rtext, rstart_col, rstart_line)
+
 #------------------------------------------------------------------------------
 #
 #------------------------------------------------------------------------------
@@ -101,6 +111,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.""".spli
         self.sc.add("word", r" ")
         self.sc.add("nostrud", r"nostrud")
         self.sc.add("line", r"\n")
+        
 
     def test_001(self):
         """test first line"""
@@ -114,9 +125,9 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.""".spli
         self.assertEqual((5,2), util_find("nostrud", 1, 0))
         self.assertEqual((5,2), util_find("nostrud", 0, 1))
         self.assertEqual((5,2), util_find("nostrud", 1, 1))
-        self.assertEqual((0,0), util_find("line", 0, 0))
 
 
+        
 #------------------------------------------------------------------------------
 #
 #------------------------------------------------------------------------------
