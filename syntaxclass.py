@@ -41,7 +41,8 @@ class SyntaxClass(object):
            # print start_line, start_col + match.start()
            return start_col + match.start(), start_line
        elif len(text) > start_line+1:
-           self.find(name, text, 0, start_line+1)
+           # print "recurse"
+           return self.find(name, text, 0, start_line+1)
            
            #for n,line in enumerate(text[start_line+1]):
            #    match = re.search(self.syntaxmap[name], line)
@@ -99,6 +100,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.""".spli
         self.sc.add("mmms", r"m")
         self.sc.add("word", r" ")
         self.sc.add("nostrud", r"nostrud")
+        self.sc.add("line", r"\n")
 
     def test_001(self):
         """test first line"""
@@ -112,6 +114,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.""".spli
         self.assertEqual((5,2), util_find("nostrud", 1, 0))
         self.assertEqual((5,2), util_find("nostrud", 0, 1))
         self.assertEqual((5,2), util_find("nostrud", 1, 1))
+        self.assertEqual((0,0), util_find("line", 0, 0))
 
 
 #------------------------------------------------------------------------------
